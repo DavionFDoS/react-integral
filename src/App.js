@@ -1,7 +1,7 @@
-import './App.css';
 import React from 'react';
+import './App.css';
 import AnswerItem from './AnswerItem';
-
+import BackGround from './imgonline-com-ua-Resize-JpYQQ4al88MXhv.png';
 class App extends React.Component{
   
   constructor (props){
@@ -11,21 +11,22 @@ class App extends React.Component{
       a:0, 
       b:100, 
       N:100,
-      answer: 0,
-      deleteIndex: 0
+      parameterList:[]
     }
     this.onAChange = this.onAChange.bind(this);
     this.onBChange = this.onBChange.bind(this);
     this.onNChange = this.onNChange.bind(this);
-    this.onAnswerChange = this.onAnswerChange.bind(this);
     this.deleteAllHandler=this.deleteAllHandler.bind(this);
     this.calculateHandler=this.calculateHandler.bind(this);
     this.deleteHandler = this.deleteHandler.bind(this);
-    this.onDeleteIndexChange = this.onDeleteIndexChange.bind(this);
   }
 
   function(x){
     return Math.pow(Math.E, x) * Math.sin(x) * Math.cos(x); 
+  }
+
+  ToString (x){
+    return x.toString;
   }
 
   deleteHandler(index){
@@ -57,16 +58,8 @@ class App extends React.Component{
     this.setState({N: val });
   }
 
-  onAnswerChange(e){
-    var val = e.target.value;
-    this.setState({answer : val});
-  }
-
-  onDeleteIndexChange(e){
-    var val = e.target.value;
-    this.setState({deleteIndex: val});
-  }
   
+
   calculateHandler=()=>{
     let currentList=this.state.AnswerList;
     let result = 0;
@@ -77,34 +70,53 @@ class App extends React.Component{
         result += this.function(this.state.a + h * (i + 0.5));
       }    
       result *= h;
-      currentList.push({answer: result});
-      console.log(currentList);      
+      currentList.push({answer: result, a: this.state.a, b: this.state.b, N: this.state.N});   
     this.setState({AnswerList:currentList});
-    this.setState({answer: result});
-    <AnswerItem answer = {result} onDelete = {this.deleteHandler.bind(this, this.state.deleteIndex)}/>;
+    console.log(this.state.parameterList);  
     }
 
   }
   render(){
-    /*let test = this.state.AnswerList.map((ans,index)=>{
-      return(<AnswerItem answer = {ans.answer} onDelete = {this.deleteHandler.bind(this, index)}/>);
-    });*/
+
+    <style>
+      @import url('https://fonts.googleapis.com/css2?family=Open+Sans&display=swap');
+    </style>
+
+    const buttonStyle = {
+      backgroundColor: 'red',
+      color: 'white',
+      border: 'none',
+      fontFamily: "Roboto",
+      bordeRadius: '10',
+      cursor: 'pointer',
+    };
+
+    let list = this.state.AnswerList.map((ans,index)=>{
+      return(<div style = {{bottom: 'absolute'}}><AnswerItem key = {index} answer = {ans.answer} onDelete = {this.deleteHandler.bind(this, index)}
+      a = {ans.a} 
+      b = {ans.b} 
+      N = {ans.N}/></div>)
+    });
+
     return (
-      <div className="settings">
+      <div style = {{backgroundImage: `url(${BackGround})`, backgroundSize: 'cover' , backgroundPosition: 'top' , backgroundRepeat: 'no-repeats', minHeight: '100vh', overflow: 'hidden'}} className = "page">
+        <div style = {{color: 'white', float: 'right', marginRight: 300}} className="settings">
         <h1 className="header">Расчет интеграла</h1>
+        <h2 className="header">Подынтыгральное выражение</h2>
+        <p> e^x * sin(x) * cos(x)dx</p>       
         <p>a</p><input type = "text" onChange={this.onAChange}></input>
         <p>b</p><input type = "text" onChange={this.onBChange}></input>
-        <p>N</p><input type = "text" onChange={this.onNChange}></input>
-        <p>Answer</p><input type = "text" onChange={this.onAnswerChange} placeholder = "Calcutaling..."></input>
+        <p>N</p><input type = "text" onChange={this.onNChange}></input> 
         <br/>
         <br/>
         <br/>
-        <button onClick = {this.calculateHandler}> Вычислить</button>
-        <button onClick ={this.deleteAllHandler}> Очистить все</button>
-        <button onClick = {this.deleteHandler}>Очистить выбранное</button>
-        <p>Index</p><input type = "text" onChange={this.onDeleteIndexChange}></input>  
+        <div>
+        <button style = {buttonStyle} onClick = {this.calculateHandler}>Вычислить</button>
+        <button style = {buttonStyle} onClick ={this.deleteAllHandler}>Очистить все</button>
         </div>
-      
+          {list.reverse()}
+        </div>
+      </div>         
     );
   }
 
