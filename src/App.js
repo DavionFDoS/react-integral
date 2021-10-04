@@ -15,9 +15,9 @@ class App extends React.Component{
     this.state={
       AnswerList:[],
       a:0, 
-      b:100, 
-      N:100,
-      parameterList:[]
+      b:0, 
+      N:0,
+      parameterList:[],
     }
     this.onAChange = this.onAChange.bind(this);
     this.onBChange = this.onBChange.bind(this);
@@ -75,59 +75,60 @@ class App extends React.Component{
       }    
       result *= h;
       currentList.push({answer: result, a: this.state.a, b: this.state.b, N: this.state.N});   
-    this.setState({AnswerList:currentList});
-    console.log(this.state.parameterList);  
+    this.setState({AnswerList:currentList}); 
     }
-
   }
+
   render(){
 
-    let list = this.state.AnswerList.map((ans,index)=>{
-      return(<div style = {{bottom: 'absolute'}}><AnswerItem key = {index} answer = {ans.answer} onDelete = {this.deleteHandler.bind(this, index)}
+    let fullList = this.state.AnswerList.map((ans,index)=>{
+      return(<div key = {index}><AnswerItem  answer = {ans.answer} onDelete = {this.deleteHandler.bind(this, index)}
       a = {ans.a} 
       b = {ans.b} 
       N = {ans.N}/></div>)
     });
-
+    console.log(fullList); 
     const Pulse = styled.div`animation: 3s ${keyframes`${pulse}`} infinite`;
-
-    return (      
-      <div style = {{backgroundImage: `url(${BackGround})`, backgroundSize: 'cover' , backgroundPosition: 'top' , backgroundRepeat: 'no-repeats', minHeight: '100vh', overflow: 'hidden'}} className = "page">
-        <form style = {{color: 'white', float: 'right', marginTop: 200, marginRight: 300}}>
-        <div className="settings">
-        <h1 style = {{}} className="header">Расчет интеграла</h1>
-        <h2 className="header2">Подынтегральное выражение</h2>
-        <p> e^x * sin(x) * cos(x)dx</p>
-        <br/>
-        <label>
-          a : 
-          <input type = "text" onChange={this.onAChange}></input>
-        </label>
-        <br/>
-        <br/>
-        <label>
-          b : 
-          <input type = "text" onChange={this.onBChange}></input>
-        </label>
-        <br/>
-        <br/>
-        <label>
-          N : 
-          <input type = "text" onChange={this.onNChange}></input>
-        </label>      
-        <br/>
-        <br/>
-        <div style={{display: 'inline-flex'}}>
-        <Pulse><Button btnStyle="emphasis" btnSize="large" onClick = {this.calculateHandler}>Вычислить</Button></Pulse>
-        <Pulse><Button style = {{marginLeft: 10}} btnStyle="emphasis" btnSize="large" onClick = {this.deleteAllHandler}>Очистить все</Button></Pulse>       
-        </div>
-          {list.reverse()}
-        </div>
-        </form> 
-        <div style={{position: "absolute", bottom: '0', right: '0', display: 'inline-block', justifyContent: 'flex-end'}}>
-          <SocialIcon url = 'https://vk.com/knightdavion'/>
-          <SocialIcon url = 'https://github.com/DavionFDoS'/>
-          <SocialIcon url = 'https://discord.com/channels/691588243434766386/691588243870711891'/>
+    let first = fullList.reverse().splice(0,1);
+    return (  
+      <div style = {{position: 'absolute',backgroundImage: `url(${BackGround})`, backgroundSize: 'cover' ,
+       backgroundPosition: 'top' , backgroundRepeat: 'no-repeats', height: '100%', width: '100%',
+        overflow: 'auto', zIndex: '-1' }}className="page">
+        <form style={{ color: 'wheat', float: 'right', marginTop: 200, marginRight: 300 }}>
+          <div className="settings">
+            <h1 style={{}} className="header">Расчет интеграла</h1>
+            <h2 className="header2">Подынтегральное выражение</h2>
+            <p> e^x * sin(x) * cos(x)dx</p>
+            <br />
+            <label>
+              a:
+              <input type="text" onChange={this.onAChange}></input>
+            </label>
+            <br />
+            <br />
+            <label>
+              b:
+              <input type="text" onChange={this.onBChange}></input>
+            </label>
+            <br />
+            <br />
+            <label>
+              N:
+              <input type="text" onChange={this.onNChange}></input>
+            </label>
+            <br />
+            <br />
+            <div style={{ display: 'inline-flex' }}>
+              <Pulse><Button btnStyle="emphasis" btnSize="large" onClick={this.calculateHandler}>Вычислить</Button></Pulse>
+              <Pulse><Button style={{ marginLeft: 10 }} btnStyle="emphasis" btnSize="large" onClick={this.deleteAllHandler}>Очистить все</Button></Pulse>
+            </div>    
+            <div style = {{color: 'red'}}>{first}</div>
+            {fullList}
+          </div>
+        </form>
+        <div style={{ position: "absolute", bottom: '0', right: '0', display: 'inline-block', justifyContent: 'flex-end' }}>
+          <SocialIcon url='https://github.com/DavionFDoS' bgColor="#ffffff"/>
+          <SocialIcon url='https://discord.com/channels/691588243434766386/691588243870711891'/>
         </div>
       </div>        
     );
