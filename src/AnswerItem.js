@@ -9,7 +9,7 @@ class AnswerItem extends Component{
         return( <div>
             <p>Answer: {roundToTwo(this.props.answer)}</p>
             <p>Input variables: a = {this.props.a} b = {this.props.b} N = {this.props.N}</p>
-            <button onClick={this.props.onDelete}>Delete</button>
+            <button onClick={this.props.onDelete}>Очистить</button>
         </div>
         );
     }

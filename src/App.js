@@ -2,6 +2,12 @@ import React from 'react';
 import './App.css';
 import AnswerItem from './AnswerItem';
 import BackGround from './imgonline-com-ua-Resize-JpYQQ4al88MXhv.png';
+import { SocialIcon } from 'react-social-icons';
+import { Button } from './Buttons';
+import '@trendmicro/react-buttons/dist/react-buttons.css';
+import styled, { keyframes } from 'styled-components';
+import { pulse } from 'react-animations';
+
 class App extends React.Component{
   
   constructor (props){
@@ -58,8 +64,6 @@ class App extends React.Component{
     this.setState({N: val });
   }
 
-  
-
   calculateHandler=()=>{
     let currentList=this.state.AnswerList;
     let result = 0;
@@ -78,19 +82,6 @@ class App extends React.Component{
   }
   render(){
 
-    <style>
-      @import url('https://fonts.googleapis.com/css2?family=Open+Sans&display=swap');
-    </style>
-
-    const buttonStyle = {
-      backgroundColor: 'red',
-      color: 'white',
-      border: 'none',
-      fontFamily: "Roboto",
-      bordeRadius: '10',
-      cursor: 'pointer',
-    };
-
     let list = this.state.AnswerList.map((ans,index)=>{
       return(<div style = {{bottom: 'absolute'}}><AnswerItem key = {index} answer = {ans.answer} onDelete = {this.deleteHandler.bind(this, index)}
       a = {ans.a} 
@@ -98,27 +89,48 @@ class App extends React.Component{
       N = {ans.N}/></div>)
     });
 
-    return (
+    const Pulse = styled.div`animation: 3s ${keyframes`${pulse}`} infinite`;
+
+    return (      
       <div style = {{backgroundImage: `url(${BackGround})`, backgroundSize: 'cover' , backgroundPosition: 'top' , backgroundRepeat: 'no-repeats', minHeight: '100vh', overflow: 'hidden'}} className = "page">
-        <div style = {{color: 'white', float: 'right', marginRight: 300}} className="settings">
-        <h1 className="header">Расчет интеграла</h1>
-        <h2 className="header">Подынтыгральное выражение</h2>
-        <p> e^x * sin(x) * cos(x)dx</p>       
-        <p>a</p><input type = "text" onChange={this.onAChange}></input>
-        <p>b</p><input type = "text" onChange={this.onBChange}></input>
-        <p>N</p><input type = "text" onChange={this.onNChange}></input> 
+        <form style = {{color: 'white', float: 'right', marginTop: 200, marginRight: 300}}>
+        <div className="settings">
+        <h1 style = {{}} className="header">Расчет интеграла</h1>
+        <h2 className="header2">Подынтегральное выражение</h2>
+        <p> e^x * sin(x) * cos(x)dx</p>
+        <br/>
+        <label>
+          a : 
+          <input type = "text" onChange={this.onAChange}></input>
+        </label>
         <br/>
         <br/>
+        <label>
+          b : 
+          <input type = "text" onChange={this.onBChange}></input>
+        </label>
         <br/>
-        <div>
-        <button style = {buttonStyle} onClick = {this.calculateHandler}>Вычислить</button>
-        <button style = {buttonStyle} onClick ={this.deleteAllHandler}>Очистить все</button>
+        <br/>
+        <label>
+          N : 
+          <input type = "text" onChange={this.onNChange}></input>
+        </label>      
+        <br/>
+        <br/>
+        <div style={{display: 'inline-flex'}}>
+        <Pulse><Button btnStyle="emphasis" btnSize="large" onClick = {this.calculateHandler}>Вычислить</Button></Pulse>
+        <Pulse><Button style = {{marginLeft: 10}} btnStyle="emphasis" btnSize="large" onClick = {this.deleteAllHandler}>Очистить все</Button></Pulse>       
         </div>
           {list.reverse()}
         </div>
-      </div>         
+        </form> 
+        <div style={{position: "absolute", bottom: '0', right: '0', display: 'inline-block', justifyContent: 'flex-end'}}>
+          <SocialIcon url = 'https://vk.com/knightdavion'/>
+          <SocialIcon url = 'https://github.com/DavionFDoS'/>
+          <SocialIcon url = 'https://discord.com/channels/691588243434766386/691588243870711891'/>
+        </div>
+      </div>        
     );
   }
-
 }
 export default App;
