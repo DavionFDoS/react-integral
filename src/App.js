@@ -98,27 +98,27 @@ class App extends React.Component{
           <div className="settings">
             <h1 style={{}} className="header">Расчет интеграла</h1>
             <h2 className="header2">Подынтегральное выражение</h2>
-            <p> e^x * sin(x) * cos(x)dx</p>
+            <p style = {{fontStyle: 'inherit', fontSize: '22px'}}> e^x * sin(x) * cos(x)dx</p>
             <br />
-            <label>
+            <label style = {{fontSize: '24px'}}>
               a:
-              <input type="text" onChange={this.onAChange}></input>
+              <input style = {{marginLeft: '5px'}} type="text" onChange={this.onAChange}></input>
             </label>
             <br />
             <br />
-            <label>
+            <label style = {{fontSize: '24px'}}>
               b:
-              <input type="text" onChange={this.onBChange}></input>
+              <input style = {{marginLeft: '5px'}} type="text" onChange={this.onBChange}></input>
             </label>
             <br />
             <br />
-            <label>
+            <label style = {{fontSize: '24px'}}>
               N:
               <input type="text" onChange={this.onNChange}></input>
             </label>
             <br />
             <br />
-            <div style={{ display: 'inline-flex' }}>
+            <div style={{ display: 'inline-flex', marginTop: '20px' }}>
               <Pulse><Button btnStyle="emphasis" btnSize="large" onClick={this.calculateHandler}>Вычислить</Button></Pulse>
               <Pulse><Button style={{ marginLeft: 10 }} btnStyle="emphasis" btnSize="large" onClick={this.deleteAllHandler}>Очистить все</Button></Pulse>
             </div>    
