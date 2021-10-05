@@ -67,7 +67,7 @@ class App extends React.Component{
   calculateHandler=()=>{
     let currentList=this.state.AnswerList;
     let result = 0;
-    if(this.state.b >= this.state.a){
+    if(this.state.b >= this.state.a && this.state.N > 0){
       let h = (this.state.b - this.state.a) / this.state.N; 
       //rectangle method
       for (let i = 0; i < this.state.N; i++) {
