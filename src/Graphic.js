@@ -3,6 +3,7 @@ import { Component } from "react";
 import BackGround from './imgonline-com-ua-Resize-JpYQQ4al88MXhv.png';
 import { SocialIcon } from 'react-social-icons';
 import Graphicf from "./Graphicf.png";
+import Sidebar from './Sidebar';
 
 class Graphic extends Component
 {
@@ -12,6 +13,7 @@ class Graphic extends Component
             <div style = {{position: 'absolute', backgroundImage: `url(${BackGround})`, backgroundSize: 'cover',
              backgroundPosition: 'top' , backgroundRepeat: 'no-repeats', height: '100%', width: '100%',
               overflow: 'auto', zIndex: '-1' }} className="page">
+                <Sidebar/>
               <form style={{ color: 'wheat', float: 'right', marginTop: 200, marginRight: 300 }}>
                 <div className="Graphic">
                   <h1 style={{ position: "absolute", bottom: '80%', right: '13.5%', justifyContent: 'flex-end' }} className="header">График функции</h1>

@@ -6,6 +6,7 @@ import { Button } from './Buttons';
 import styled, { keyframes } from 'styled-components';
 import { pulse } from 'react-animations';
 import AnswerItem from './AnswerItem';
+import Sidebar from './Sidebar';
 
 class CalculationPage extends Component
 {
@@ -91,6 +92,7 @@ class CalculationPage extends Component
             <div style = {{position: 'absolute', backgroundImage: `url(${BackGround})`, backgroundSize: 'cover',
              backgroundPosition: 'top' , backgroundRepeat: 'no-repeats', height: '100%', width: '100%',
               overflow: 'auto', zIndex: '-1' }} className="page">
+
               <form style={{ color: 'wheat', float: 'right', marginTop: 200, marginRight: 300 }}>
                 <div className="settings">
                   <h1 style={{}} className="header">Расчет интеграла</h1>
@@ -123,6 +125,7 @@ class CalculationPage extends Component
                   {fullList}
                 </div>
               </form>
+              <Sidebar/>
               <div style={{ position: "absolute", bottom: '0', right: '0', display: 'inline-block', justifyContent: 'flex-end' }}>
                 <SocialIcon url='https://github.com/DavionFDoS' bgColor="#ffffff"/>
                 <SocialIcon url='https://discord.com/channels/691588243434766386/691588243870711891'/>

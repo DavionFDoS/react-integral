@@ -3,15 +3,17 @@ import { Component } from "react";
 import BackGround from './imgonline-com-ua-Resize-JpYQQ4al88MXhv.png';
 import { SocialIcon } from 'react-social-icons';
 import RectFormula from './RectFormula.png'
+import Sidebar from './Sidebar';
 
 class RectangleMethodDescription extends Component
 {
     render()
     {
-        return (  
+        return (          
             <div style = {{position: 'absolute', backgroundImage: `url(${BackGround})`, backgroundSize: 'cover',
              backgroundPosition: 'top' , backgroundRepeat: 'no-repeats', height: '100%', width: '100%',
               overflow: 'auto', zIndex: '-1' }} className="page">
+                <Sidebar/>
               <form style={{ color: 'wheat', float: 'right', marginTop: 200, marginRight: 300 }}>
                 <div className="RectangleMethodDescription">
                   <h1 style={{ position: "absolute", bottom: '75%', right: '7%', justifyContent: 'flex-end' }} className="header">Описание метода прямоугольников</h1>                  
