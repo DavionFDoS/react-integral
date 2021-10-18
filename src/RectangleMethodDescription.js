@@ -4,7 +4,6 @@ import BackGround from './imgonline-com-ua-Resize-JpYQQ4al88MXhv.png';
 import { SocialIcon } from 'react-social-icons';
 import RectFormula from './RectFormula.png'
 import Sidebar from './Sidebar';
-
 class RectangleMethodDescription extends Component
 {
     render()
@@ -18,7 +17,7 @@ class RectangleMethodDescription extends Component
                 <div className="RectangleMethodDescription">
                   <h1 style={{ position: "absolute", bottom: '75%', right: '7%', justifyContent: 'flex-end' }} className="header">Описание метода прямоугольников</h1>                  
                   <br/>
-                  <text style={{textAlign: 'justify',position: "absolute", bottom: '50%', right: '3%', justifyContent: 'flex-end', maxWidth: 700}}>
+                  <text style={{textAlign: 'justify',position: "absolute", bottom: '52%', right: '3%', justifyContent: 'flex-end', maxWidth: 700}}>
                   Метод прямоугольников — метод численного интегрирования функции одной переменной, заключающийся в замене подынтегральной функции на многочлен нулевой степени,
                     то есть константу, на каждом элементарном отрезке. Если рассмотреть график подынтегральной функции,
                      то метод будет заключаться в приближённом вычислении площади под графиком суммированием площадей конечного числа прямоугольников,
@@ -27,7 +26,7 @@ class RectangleMethodDescription extends Component
                        <br/>Если отрезок [a,b] является элементарным и не подвергается дальнейшему разбиению, значение интеграла можно найти по
                        <br/>                       
                   </text>
-                  <img style={{ position: "absolute", bottom: '30%', right: '9%', justifyContent: 'flex-end' }} src = {RectFormula} alt = "rectFormula"/>
+                  <img style={{ position: "absolute", bottom: '33%', right: '9%', justifyContent: 'flex-end' }} src = {RectFormula} alt = "rectFormula"/>
                 </div>
               </form>
               <div style={{ position: "absolute", bottom: '0', right: '0', display: 'inline-block', justifyContent: 'flex-end' }}>
