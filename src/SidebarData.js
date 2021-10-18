@@ -5,17 +5,17 @@ import DescriptionIcon from '@mui/icons-material/Description';
 export const SidebarData = [
 
     {
-        icon: <CalculateIcon/>,
+        icon: <CalculateIcon fontSize = 'large'/>,
         link: "/CalculationPage"
 
     },
     {
-        icon: <ShowChartIcon/>,
+        icon: <ShowChartIcon fontSize = 'large'/>,
         link: "/Graphic"
 
     },
     {
-        icon: <DescriptionIcon/>,
+        icon: <DescriptionIcon fontSize = 'large'/>,
         link: "/RectangleMethodDescription"
     }
 ]

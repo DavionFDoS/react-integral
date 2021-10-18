@@ -8,8 +8,8 @@ body{
 }
 
 .Sidebar{
-  height: 100%;
-  width: 70px;
+  height: auto;
+  width: 80px;
   background-color: #EA4E44;
 }
 
