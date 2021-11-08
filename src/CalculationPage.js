@@ -98,7 +98,7 @@ class CalculationPage extends Component
       handleSubmit(e) {
         e.preventDefault();
         if(!(this.state.aValid ===true && this.state.bValid===true && this.state.NValid===true)){
-            alert("Please check again inputed parameters!");
+            alert("Please check inputed parameters again!");
         }
     }
     
@@ -130,7 +130,7 @@ class CalculationPage extends Component
         const headers = {
           'Content-Type': 'application/json'
         }
-        //"http://localhost:56619/api/Integral"
+        //"http://localhost:56619/api/Integral" process.env.REACT_APP_PATH
         axios.post(process.env.REACT_APP_PATH, jsonModel,{
           headers: headers
         })
