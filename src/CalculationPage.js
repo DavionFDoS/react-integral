@@ -7,6 +7,7 @@ import styled, { keyframes } from 'styled-components';
 import { pulse } from 'react-animations';
 import AnswerItem from './AnswerItem';
 import Sidebar from './Sidebar';
+import axios from 'axios';
 
 class CalculationPage extends Component
 {
@@ -17,11 +18,13 @@ class CalculationPage extends Component
           a:0, 
           b:0, 
           N:0,
+          integralExpresion: null,
           parameterList:[],
         }
         this.onAChange = this.onAChange.bind(this);
         this.onBChange = this.onBChange.bind(this);
         this.onNChange = this.onNChange.bind(this);
+        this.onIntegralExpresionChange = this.onIntegralExpresionChange.bind(this);
         this.deleteAllHandler=this.deleteAllHandler.bind(this);
         this.calculateHandler=this.calculateHandler.bind(this);
         this.deleteHandler = this.deleteHandler.bind(this);
@@ -63,20 +66,47 @@ class CalculationPage extends Component
         var val = e.target.value;
         this.setState({N: val });
       }
+
+      onIntegralExpresionChange(e) {
+        var val = e.target.value;
+        this.setState({integralExpresion: val });
+      }
     
-      calculateHandler=()=>{
+      // calculateHandler=()=>{
+      //   let currentList=this.state.AnswerList;
+      //   let result = 0;
+      //   if(this.state.b >= this.state.a && this.state.N > 0){
+      //     let h = (this.state.b - this.state.a) / this.state.N; 
+      //     //rectangle method
+      //     for (let i = 0; i < this.state.N; i++) {
+      //       result += this.function(this.state.a + h * (i + 0.5));
+      //     }    
+      //     result *= h;
+      //     currentList.push({answer: result, a: this.state.a, b: this.state.b, N: this.state.N});   
+      //   this.setState({AnswerList:currentList}); 
+      //   }
+      // }
+
+      calculateHandler(){
         let currentList=this.state.AnswerList;
-        let result = 0;
-        if(this.state.b >= this.state.a && this.state.N > 0){
-          let h = (this.state.b - this.state.a) / this.state.N; 
-          //rectangle method
-          for (let i = 0; i < this.state.N; i++) {
-            result += this.function(this.state.a + h * (i + 0.5));
-          }    
-          result *= h;
-          currentList.push({answer: result, a: this.state.a, b: this.state.b, N: this.state.N});   
-        this.setState({AnswerList:currentList}); 
+        let integralVars = {
+          a: this.state.a,
+          b: this.state.b,
+          n: this.state.N,
+          integral: this.state.integralExpresion
+        };        
+        const jsonModel = JSON.stringify(integralVars);
+        console.log(jsonModel);
+        const headers = {
+          'Content-Type': 'application/json'
         }
+        axios.post(process.env.REACT_APP_PATH, jsonModel,{
+          headers: headers
+        })
+          .then(res => {
+            currentList.push({answer:res.data.answer, a: this.state.a, b: this.state.b, N: this.state.N});
+            this.setState({AnswerList:currentList})
+          })    
       }
     render()
     {
@@ -96,8 +126,9 @@ class CalculationPage extends Component
               <form style={{ color: 'wheat', float: 'right', marginTop: 200, marginRight: 300 }}>
                 <div className="settings">
                   <h1 style={{}} className="header">Расчет интеграла</h1>
-                  <h2 className="header2">Подынтегральное выражение</h2>
-                  <p style = {{fontStyle: 'inherit', fontSize: '22px'}}> e^x * sin(x) * cos(x)dx</p>
+                  <h2 className="header2">Введите подынтегральное выражение</h2>
+                  <input style = {{marginLeft: '20px'}} type="text" onChange={this.onIntegralExpresionChange }></input>
+                  <br />
                   <br />
                   <label style = {{fontSize: '24px'}}>
                     a:
