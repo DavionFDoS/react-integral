@@ -13,14 +13,26 @@ class CalculationPage extends Component
 {
     constructor (props){
         super(props);
+        var aValue = 0;
+        var bValue = 0;
+        var nValue = 100;
+
+        var aIsValid = this.ValidateAValue(aValue);
+        var bIsValid = this.ValidateBValue(bValue);
+        var NIsValid = this.ValidateNValue(nValue);
+
         this.state={
           AnswerList:[],
-          a:0, 
-          b:0, 
-          N:0,
-          integralExpresion: null,
+          a:aValue, 
+          b:bValue, 
+          N:nValue,
+          aValid: aIsValid,
+          bValid: bIsValid,
+          NValid: NIsValid,
+          integralExpresion: "x*x",
           parameterList:[],
         }
+
         this.onAChange = this.onAChange.bind(this);
         this.onBChange = this.onBChange.bind(this);
         this.onNChange = this.onNChange.bind(this);
@@ -28,14 +40,22 @@ class CalculationPage extends Component
         this.deleteAllHandler=this.deleteAllHandler.bind(this);
         this.calculateHandler=this.calculateHandler.bind(this);
         this.deleteHandler = this.deleteHandler.bind(this);
+        this.handleSubmit = this.handleSubmit.bind(this);
       }
     
-      function(x){
-        return Math.pow(Math.E, x) * Math.sin(x) * Math.cos(x); 
+      ValidateAValue(a)
+      {
+        return a >=0;
       }
-    
-      ToString (x){
-        return x.toString;
+
+      ValidateBValue(b)
+      {
+        return b >= 0;
+      }
+
+      ValidateNValue(n)
+      {
+        return n % 2 === 0;
       }
     
       deleteHandler(index){
@@ -54,23 +74,33 @@ class CalculationPage extends Component
     
       onAChange(e) {
         var val = e.target.value;
-        this.setState({a: val });
+        var valid = this.ValidateAValue(val);
+        this.setState({a: val , aValid: valid});
       }
     
       onBChange(e) {
         var val = e.target.value;
-        this.setState({b: val });
+        var valid = this.ValidateBValue(val);
+        this.setState({b: val , bValid: valid});
       }
     
       onNChange(e) {
         var val = e.target.value;
-        this.setState({N: val });
+        var valid = this.ValidateNValue(val);
+        this.setState({N: val , NValid: valid});
       }
 
       onIntegralExpresionChange(e) {
         var val = e.target.value;
         this.setState({integralExpresion: val });
       }
+
+      handleSubmit(e) {
+        e.preventDefault();
+        if(!(this.state.aValid ===true && this.state.bValid===true && this.state.NValid===true)){
+            alert("Please check again inputed parameters!");
+        }
+    }
     
       // calculateHandler=()=>{
       //   let currentList=this.state.AnswerList;
@@ -100,6 +130,7 @@ class CalculationPage extends Component
         const headers = {
           'Content-Type': 'application/json'
         }
+        //"http://localhost:56619/api/Integral"
         axios.post(process.env.REACT_APP_PATH, jsonModel,{
           headers: headers
         })
@@ -110,6 +141,9 @@ class CalculationPage extends Component
       }
     render()
     {
+      var aInputColor = this.state.aValid===true?"green":"red";
+      var bInputColor = this.state.bValid===true?"green":"red";
+      var NInputColor = this.state.NValid===true?"green":"red";
         let fullList = this.state.AnswerList.map((ans,index)=>{
             return(<div key = {index}><AnswerItem  answer = {ans.answer} onDelete = {this.deleteHandler.bind(this, index)}
             a = {ans.a} 
@@ -122,8 +156,7 @@ class CalculationPage extends Component
             <div style = {{position: 'absolute', backgroundImage: `url(${BackGround})`, backgroundSize: 'cover',
              backgroundPosition: 'top' , backgroundRepeat: 'no-repeats', height: '100%', width: '100%',
               overflow: 'auto', zIndex: '-1' }} className="page">
-
-              <form style={{ color: 'wheat', float: 'right', marginTop: 200, marginRight: 300 }}>
+              <form style={{ color: 'wheat', float: 'right', marginTop: 200, marginRight: 300 }} onSubmit = {this.handleSubmit}>
                 <div className="settings">
                   <h1 style={{}} className="header">Расчет интеграла</h1>
                   <h2 className="header2">Введите подынтегральное выражение</h2>
@@ -132,24 +165,24 @@ class CalculationPage extends Component
                   <br />
                   <label style = {{fontSize: '24px'}}>
                     a:
-                    <input style = {{marginLeft: '5px'}} type="text" onChange={this.onAChange}></input>
+                    <input value={this.state.a} style = {{marginLeft: '5px', borderColor:aInputColor}} type="text" onChange={this.onAChange}></input>
                   </label>
                   <br />
                   <br />
                   <label style = {{fontSize: '24px'}}>
                     b:
-                    <input style = {{marginLeft: '5px'}} type="text" onChange={this.onBChange}></input>
+                    <input value={this.state.b} style = {{marginLeft: '5px', borderColor:bInputColor}} type="text" onChange={this.onBChange}></input>
                   </label>
                   <br />
                   <br />
                   <label style = {{fontSize: '24px'}}>
                     N:
-                    <input type="text" onChange={this.onNChange}></input>
+                    <input value={this.state.N} style={{borderColor:NInputColor}} type="text" onChange={this.onNChange} ></input>
                   </label>
                   <br />
                   <br />
                   <div style={{ display: 'inline-flex', marginTop: '20px' }}>
-                    <Pulse><Button btnStyle="emphasis" btnSize="large" onClick={this.calculateHandler}>Вычислить</Button></Pulse>
+                    <Pulse><Button type = "submit" btnStyle="emphasis" btnSize="large" onClick={this.calculateHandler}>Вычислить</Button></Pulse>
                     <Pulse><Button style={{ marginLeft: 10 }} btnStyle="emphasis" btnSize="large" onClick={this.deleteAllHandler}>Очистить все</Button></Pulse>
                   </div>    
                   <div style = {{color: 'red'}}>{first}</div>
