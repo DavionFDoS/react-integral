@@ -1,4 +1,4 @@
-version: "3.9"
+version: "3.3"
 
 services:
 
@@ -6,9 +6,9 @@ services:
     image: donutdrifter/app
     restart: always
     ports:
-      - 3000:3000
+      - 3010:3000
     environment:
-      REACT_APP_PATH: 'http://integral:5010/api/Integral'
+      REACT_APP_PATH: 'http://localhost:5010/api/Integral'
 
   portainer:
     image: portainer/portainer-ce
@@ -20,4 +20,4 @@ services:
     image: donutdrifter/integralservice
     restart: always
     ports:
-      - 5010:5000    
+      - 5010:5000

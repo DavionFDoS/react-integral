@@ -20,8 +20,7 @@ class Sidebar extends Component
                             </div>
                         </li>                   
                     )})}
-                </ul>
-                
+                </ul>                
             </div>
         );
     }    
