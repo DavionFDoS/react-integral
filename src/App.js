@@ -8,11 +8,10 @@ import RectangleMethodDescription from "./RectangleMethodDescription";
 class App extends React.Component
 { 
   render()
-  {    
-    
+  {       
     const {history} = this.props;
 
-    return (
+    return(
       <div className = "App">
       <BrowserRouter>
       <Switch>
@@ -26,4 +25,5 @@ class App extends React.Component
     );
   }
 }
+
 export default withRouter(App);

@@ -6,43 +6,41 @@ import { Button } from './Buttons';
 import styled, { keyframes } from 'styled-components';
 import { pulse } from 'react-animations';
 import AnswerItem from './AnswerItem';
+import {Calculate, DeleteAll,Delete} from './store/actionTypes/actions'
 import Sidebar from './Sidebar';
 import axios from 'axios';
-
+import {connect} from 'react-redux'
 class CalculationPage extends Component
 {
     constructor (props){
         super(props);
+        console.log(props);
         var aValue = 0;
         var bValue = 0;
         var nValue = 100;
-
         var aIsValid = this.ValidateAValue(aValue);
         var bIsValid = this.ValidateBValue(bValue);
         var NIsValid = this.ValidateNValue(nValue);
 
         this.state={
-          AnswerList:[],
           a:aValue, 
           b:bValue, 
           N:nValue,
           aValid: aIsValid,
           bValid: bIsValid,
           NValid: NIsValid,
-          integralExpresion: "x*x",
-          parameterList:[],
+          integralExpresion: "x*x"
         }
-
         this.onAChange = this.onAChange.bind(this);
         this.onBChange = this.onBChange.bind(this);
         this.onNChange = this.onNChange.bind(this);
         this.onIntegralExpresionChange = this.onIntegralExpresionChange.bind(this);
-        this.deleteAllHandler=this.deleteAllHandler.bind(this);
+        //this.deleteAllHandler=this.deleteAllHandler.bind(this);
         this.calculateHandler=this.calculateHandler.bind(this);
         this.deleteHandler = this.deleteHandler.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
       }
-    
+
       ValidateAValue(a)
       {
         return a >=0;
@@ -59,39 +57,66 @@ class CalculationPage extends Component
       }
     
       deleteHandler(index){
-        let answerList = this.state.AnswerList;
-        if(answerList.length !== 0){   
-          answerList.splice(index,1);   
-          this.setState({AnswerList:answerList});
-        }
+        this.props.onDel(index);
+        // let answerList = this.state.AnswerList;
+        // if(answerList.length !== 0){   
+        //   answerList.splice(index,1);   
+        //   this.setState({AnswerList:answerList});
+        // }
       }
     
-      deleteAllHandler()
-      {
-        const clearedAnswerList=[]
-        this.setState({AnswerList:clearedAnswerList})
-      }
+      // deleteAllHandler()
+      // {
+      //   const clearedAnswerList=[]
+      //   this.setState({AnswerList:clearedAnswerList})
+      // }
     
       onAChange(e) {
         var val = e.target.value;
         var valid = this.ValidateAValue(val);
+        // const dispatch = useDispatch();
+        // if(valid){
+        //   dispatch({
+        //     type: CHANGEA,
+        //     val,
+        //   });
+        // }
         this.setState({a: val , aValid: valid});
       }
     
       onBChange(e) {
         var val = e.target.value;
         var valid = this.ValidateBValue(val);
+        // const dispatch = useDispatch();
+        // if(valid){
+        //   dispatch({
+        //     type: CHANGEB,
+        //     val,
+        //   });
+        // }
         this.setState({b: val , bValid: valid});
       }
     
       onNChange(e) {
         var val = e.target.value;
         var valid = this.ValidateNValue(val);
+        // const dispatch = useDispatch();
+        // if(valid){
+        //   dispatch({
+        //     type: CHANGEN,
+        //     val,
+        //   });
+        // }
         this.setState({N: val , NValid: valid});
       }
 
       onIntegralExpresionChange(e) {
         var val = e.target.value;
+        // const dispatch = useDispatch();
+        // dispatch({
+        //   type: CHANGEIE,
+        //   val,
+        // });
         this.setState({integralExpresion: val });
       }
 
@@ -101,24 +126,9 @@ class CalculationPage extends Component
             alert("Please check inputed parameters again!");
         }
     }
-    
-      // calculateHandler=()=>{
-      //   let currentList=this.state.AnswerList;
-      //   let result = 0;
-      //   if(this.state.b >= this.state.a && this.state.N > 0){
-      //     let h = (this.state.b - this.state.a) / this.state.N; 
-      //     //rectangle method
-      //     for (let i = 0; i < this.state.N; i++) {
-      //       result += this.function(this.state.a + h * (i + 0.5));
-      //     }    
-      //     result *= h;
-      //     currentList.push({answer: result, a: this.state.a, b: this.state.b, N: this.state.N});   
-      //   this.setState({AnswerList:currentList}); 
-      //   }
-      // }
 
       calculateHandler(){
-        let currentList=this.state.AnswerList;
+        let currentList=this.props.AnswerList;
         let integralVars = {
           a: this.state.a,
           b: this.state.b,
@@ -126,33 +136,43 @@ class CalculationPage extends Component
           integral: this.state.integralExpresion
         };        
         const jsonModel = JSON.stringify(integralVars);
-        console.log(jsonModel);
         const headers = {
           'Content-Type': 'application/json'
         }
         //"http://localhost:56619/api/Integral" process.env.REACT_APP_PATH
-        axios.post(process.env.REACT_APP_PATH, jsonModel,{
+        axios.post("http://localhost:56619/api/Integral", jsonModel,{
           headers: headers
         })
           .then(res => {
-            currentList.push({answer:res.data.answer, a: this.state.a, b: this.state.b, N: this.state.N});
-            this.setState({AnswerList:currentList})
-          })    
+            currentList.push({answer:res.data.answer, a: integralVars.a, b: integralVars.b, N: integralVars.n});
+            this.props.onCalc(currentList);  
+            //this.setState({AnswerList:currentList})
+          })
+          .catch(error => console.log(error));    
       }
+
+
     render()
     {
       var aInputColor = this.state.aValid===true?"green":"red";
       var bInputColor = this.state.bValid===true?"green":"red";
       var NInputColor = this.state.NValid===true?"green":"red";
-        let fullList = this.state.AnswerList.map((ans,index)=>{
-            return(<div key = {index}><AnswerItem  answer = {ans.answer} onDelete = {this.deleteHandler.bind(this, index)}
+      let fullList = this.props.AnswerList.map((ans,index)=>
+      {
+        if(index === 0)        
+          return(<div style = {{color: "red"}} key = {index}><AnswerItem  answer = {ans.answer} onDelete = {this.deleteHandler.bind(this, index)}
             a = {ans.a} 
             b = {ans.b} 
-            N = {ans.N}/></div>)
-          });
-          const Pulse = styled.div`animation: 3s ${keyframes`${pulse}`} infinite`;
-          let first = fullList.reverse().splice(0,1);
+            N = {ans.N}/></div>);
+      
+          return(<div key = {index}><AnswerItem  answer = {ans.answer} onDelete = {this.deleteHandler.bind(this, index)}
+          a = {ans.a} 
+          b = {ans.b} 
+          N = {ans.N}/></div>)  
+      });      
+      const Pulse = styled.div`animation: 3s ${keyframes`${pulse}`} infinite`;
         return (  
+          <div>
             <div style = {{position: 'absolute', backgroundImage: `url(${BackGround})`, backgroundSize: 'cover',
              backgroundPosition: 'top' , backgroundRepeat: 'no-repeats', height: '100%', width: '100%',
               overflow: 'auto', zIndex: '-1' }} className="page">
@@ -160,7 +180,7 @@ class CalculationPage extends Component
                 <div className="settings">
                   <h1 style={{}} className="header">Расчет интеграла</h1>
                   <h2 className="header2">Введите подынтегральное выражение</h2>
-                  <input style = {{marginLeft: '20px'}} type="text" onChange={this.onIntegralExpresionChange }></input>
+                  <input style = {{marginLeft: '20px'}} type="text" onChange={this.onIntegralExpresionChange}></input>
                   <br />
                   <br />
                   <label style = {{fontSize: '24px'}}>
@@ -183,10 +203,9 @@ class CalculationPage extends Component
                   <br />
                   <div style={{ display: 'inline-flex', marginTop: '20px' }}>
                     <Pulse><Button type = "submit" btnStyle="emphasis" btnSize="large" onClick={this.calculateHandler}>Вычислить</Button></Pulse>
-                    <Pulse><Button style={{ marginLeft: 10 }} btnStyle="emphasis" btnSize="large" onClick={this.deleteAllHandler}>Очистить все</Button></Pulse>
-                  </div>    
-                  <div style = {{color: 'red'}}>{first}</div>
-                  {fullList}
+                    <Pulse><Button style={{ marginLeft: 10 }} btnStyle="emphasis" btnSize="large" onClick={this.props.onDelAll}>Очистить все</Button></Pulse>
+                  </div>  
+                  {fullList}                                 
                 </div>
               </form>
               <Sidebar/>
@@ -195,9 +214,27 @@ class CalculationPage extends Component
                 <SocialIcon url='https://discord.com/channels/691588243434766386/691588243870711891'/>
                 <p style = {{color: "wheat"}}>Деточенко М. А.</p>
               </div>
-            </div>        
-          );
+            </div>
+          </div>     
+        );
     }
     
 }
-export default CalculationPage;
+
+function mapStateToProps(state1)
+{
+  return({
+      AnswerList: state1.answerList,
+  });
+}
+
+function mapDispatchToProps(dispatch)
+{
+  return{
+    onCalc: (curList) => dispatch(Calculate(curList)),
+    onDelAll: () => dispatch(DeleteAll()),
+    onDel: (index) => dispatch(Delete(index))
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps) (CalculationPage);
