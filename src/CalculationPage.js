@@ -180,19 +180,3 @@ export default function CalculationPage()
           </div>     
         );
 }
-
-// function mapStateToProps(state1)
-// {
-//   return({
-//       AnswerList: state1.answerList,
-//   });
-// }
-
-// function mapDispatchToProps(dispatch)
-// {
-//   return{
-//     onCalc: (curList) => dispatch(Calculate(curList)),
-//     onDelAll: () => dispatch(DeleteAll()),
-//     onDel: (index) => dispatch(Delete(index))
-//   }
-// }
