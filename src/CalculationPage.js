@@ -1,140 +1,99 @@
 import React from 'react';
-import { Component } from "react";
 import BackGround from './imgonline-com-ua-Resize-JpYQQ4al88MXhv.png';
 import { SocialIcon } from 'react-social-icons';
 import { Button } from './Buttons';
 import styled, { keyframes } from 'styled-components';
 import { pulse } from 'react-animations';
 import AnswerItem from './AnswerItem';
-import {Calculate, DeleteAll,Delete} from './store/actionTypes/actions'
 import Sidebar from './Sidebar';
 import axios from 'axios';
-import {connect} from 'react-redux'
-class CalculationPage extends Component
+import {useState} from 'react'
+
+const Pulse = styled.div`animation: 3s ${keyframes`${pulse}`} infinite`;
+
+export default function CalculationPage()
 {
-    constructor (props){
-        super(props);
-        console.log(props);
-        var aValue = 0;
-        var bValue = 0;
-        var nValue = 100;
-        var aIsValid = this.ValidateAValue(aValue);
-        var bIsValid = this.ValidateBValue(bValue);
-        var NIsValid = this.ValidateNValue(nValue);
-
-        this.state={
-          a:aValue, 
-          b:bValue, 
-          N:nValue,
-          aValid: aIsValid,
-          bValid: bIsValid,
-          NValid: NIsValid,
-          integralExpresion: "x*x"
-        }
-        this.onAChange = this.onAChange.bind(this);
-        this.onBChange = this.onBChange.bind(this);
-        this.onNChange = this.onNChange.bind(this);
-        this.onIntegralExpresionChange = this.onIntegralExpresionChange.bind(this);
-        //this.deleteAllHandler=this.deleteAllHandler.bind(this);
-        this.calculateHandler=this.calculateHandler.bind(this);
-        this.deleteHandler = this.deleteHandler.bind(this);
-        this.handleSubmit = this.handleSubmit.bind(this);
-      }
-
-      ValidateAValue(a)
+      function ValidateAValue(a)
       {
         return a >=0;
       }
 
-      ValidateBValue(b)
+      function ValidateBValue(b)
       {
         return b >= 0;
       }
 
-      ValidateNValue(n)
+      function ValidateNValue(n)
       {
         return n % 2 === 0;
       }
-    
-      deleteHandler(index){
-        this.props.onDel(index);
-        // let answerList = this.state.AnswerList;
-        // if(answerList.length !== 0){   
-        //   answerList.splice(index,1);   
-        //   this.setState({AnswerList:answerList});
-        // }
+
+      const [inputs, setInputs] = useState({
+        a: 0,
+        b: 0, 
+        N: 100, 
+        aValid: true,
+        bValid: true,
+        NValid: true, 
+        integralExpresion: "x*x"});
+
+      const [answerList, setAnswerList] = useState([])
+
+      const deleteHandler = (index) =>{
+        //this.props.onDel(index);
+        let answerListNew = answerList;
+        if(answerListNew.length !== 0){   
+          answerListNew.splice(index,1);   
+          setAnswerList(answerListNew.slice());
+        }
       }
     
-      // deleteAllHandler()
-      // {
-      //   const clearedAnswerList=[]
-      //   this.setState({AnswerList:clearedAnswerList})
-      // }
-    
-      onAChange(e) {
-        var val = e.target.value;
-        var valid = this.ValidateAValue(val);
-        // const dispatch = useDispatch();
-        // if(valid){
-        //   dispatch({
-        //     type: CHANGEA,
-        //     val,
-        //   });
-        // }
-        this.setState({a: val , aValid: valid});
+      const deleteAllHandler = () =>
+      {
+        const clearedAnswerList=[]
+        setAnswerList(clearedAnswerList.slice());
+        console.log(answerList);
       }
     
-      onBChange(e) {
+      function onAChange(e) {
         var val = e.target.value;
-        var valid = this.ValidateBValue(val);
-        // const dispatch = useDispatch();
-        // if(valid){
-        //   dispatch({
-        //     type: CHANGEB,
-        //     val,
-        //   });
-        // }
-        this.setState({b: val , bValid: valid});
+        var valid = ValidateAValue(val);
+        setInputs({...inputs, a: e.target.value, aValid: valid});
       }
     
-      onNChange(e) {
+      function onBChange(e) {
         var val = e.target.value;
-        var valid = this.ValidateNValue(val);
-        // const dispatch = useDispatch();
-        // if(valid){
-        //   dispatch({
-        //     type: CHANGEN,
-        //     val,
-        //   });
-        // }
-        this.setState({N: val , NValid: valid});
+        var valid = ValidateBValue(val);
+        setInputs({...inputs, b: e.target.value, bValid: valid});
+      }
+    
+      function onNChange(e) {
+        var val = e.target.value;
+        var valid = ValidateNValue(val);
+        setInputs({...inputs, N: e.target.value, NValid: valid});
       }
 
-      onIntegralExpresionChange(e) {
-        var val = e.target.value;
-        // const dispatch = useDispatch();
-        // dispatch({
-        //   type: CHANGEIE,
-        //   val,
-        // });
-        this.setState({integralExpresion: val });
+      function onIntegralExpresionChange(e) {
+        setInputs({...inputs, integralExpresion: e.target.value});
       }
 
-      handleSubmit(e) {
+      function handleSubmit(e) {
         e.preventDefault();
-        if(!(this.state.aValid ===true && this.state.bValid===true && this.state.NValid===true)){
+        if(!(inputs.aValid === true && inputs.bValid === true && inputs.NValid === true)){
             alert("Please check inputed parameters again!");
         }
-    }
+      }
 
-      calculateHandler(){
-        let currentList=this.props.AnswerList;
+      const calculateHandler = () =>{
+        let currentList = answerList;
+        console.log("Enter");
+        console.log(currentList);
         let integralVars = {
-          a: this.state.a,
-          b: this.state.b,
-          n: this.state.N,
-          integral: this.state.integralExpresion
-        };        
+          a: inputs.a,
+          b: inputs.b,
+          n: inputs.N,
+          integral: inputs.integralExpresion
+        };
         const jsonModel = JSON.stringify(integralVars);
         const headers = {
           'Content-Type': 'application/json'
@@ -144,68 +103,71 @@ class CalculationPage extends Component
           headers: headers
         })
           .then(res => {
-            currentList.push({answer:res.data.answer, a: integralVars.a, b: integralVars.b, N: integralVars.n});
-            this.props.onCalc(currentList);  
-            //this.setState({AnswerList:currentList})
+            currentList.unshift({answer:res.data.answer,a: integralVars.a, b: integralVars.b, N: integralVars.n});
+            console.log("After");
+            console.log(currentList);
+            setAnswerList(currentList.slice());
+            console.log("AnswerList");
+            console.log(answerList);            
           })
           .catch(error => console.log(error));    
       }
 
-
-    render()
-    {
-      var aInputColor = this.state.aValid===true?"green":"red";
-      var bInputColor = this.state.bValid===true?"green":"red";
-      var NInputColor = this.state.NValid===true?"green":"red";
-      let fullList = this.props.AnswerList.map((ans,index)=>
-      {
-        if(index === 0)        
-          return(<div style = {{color: "red"}} key = {index}><AnswerItem  answer = {ans.answer} onDelete = {this.deleteHandler.bind(this, index)}
-            a = {ans.a} 
-            b = {ans.b} 
-            N = {ans.N}/></div>);
+      var aInputColor = inputs.aValid===true?"green":"red";
+      var bInputColor = inputs.bValid===true?"green":"red";
+      var NInputColor = inputs.NValid===true?"green":"red";
       
-          return(<div key = {index}><AnswerItem  answer = {ans.answer} onDelete = {this.deleteHandler.bind(this, index)}
+      let list = answerList.map((ans,index)=>
+      {
+      if(index === 0){  
+        return(<div style = {{color: "red"}} key = {index}><AnswerItem  answer = {ans.answer} onDelete = {() => deleteHandler(index)}
           a = {ans.a} 
           b = {ans.b} 
-          N = {ans.N}/></div>)  
-      });      
-      const Pulse = styled.div`animation: 3s ${keyframes`${pulse}`} infinite`;
-        return (  
+          N = {ans.N}/>
+          </div>)
+      }
+        return(<div key = {index}><AnswerItem  answer = {ans.answer} onDelete = {() => deleteHandler(index)}
+        a = {ans.a} 
+        b = {ans.b} 
+        N = {ans.N}/>
+        </div>)  
+    })
+
+      return (
           <div>
             <div style = {{position: 'absolute', backgroundImage: `url(${BackGround})`, backgroundSize: 'cover',
              backgroundPosition: 'top' , backgroundRepeat: 'no-repeats', height: '100%', width: '100%',
               overflow: 'auto', zIndex: '-1' }} className="page">
-              <form style={{ color: 'wheat', float: 'right', marginTop: 200, marginRight: 300 }} onSubmit = {this.handleSubmit}>
+              <form style={{ color: 'wheat', float: 'right', marginTop: 200, marginRight: 300 }} onSubmit = {(e) => handleSubmit(e)}>
                 <div className="settings">
                   <h1 style={{}} className="header">Расчет интеграла</h1>
                   <h2 className="header2">Введите подынтегральное выражение</h2>
-                  <input style = {{marginLeft: '20px'}} type="text" onChange={this.onIntegralExpresionChange}></input>
+                  <input value={inputs.integralExpresion} style = {{marginLeft: '20px'}} type="text" onChange={(e) =>onIntegralExpresionChange(e)}></input>
                   <br />
                   <br />
                   <label style = {{fontSize: '24px'}}>
                     a:
-                    <input value={this.state.a} style = {{marginLeft: '5px', borderColor:aInputColor}} type="text" onChange={this.onAChange}></input>
+                    <input value={inputs.a} style = {{marginLeft: '5px', borderColor:aInputColor}} type="number" onChange={(e) =>onAChange()}></input>
                   </label>
                   <br />
                   <br />
                   <label style = {{fontSize: '24px'}}>
                     b:
-                    <input value={this.state.b} style = {{marginLeft: '5px', borderColor:bInputColor}} type="text" onChange={this.onBChange}></input>
+                    <input value={inputs.b} style = {{marginLeft: '5px', borderColor:bInputColor}} type="number" onChange={(e) => onBChange(e)}></input>
                   </label>
                   <br />
                   <br />
                   <label style = {{fontSize: '24px'}}>
                     N:
-                    <input value={this.state.N} style={{borderColor:NInputColor}} type="text" onChange={this.onNChange} ></input>
+                    <input value={inputs.N} style={{borderColor:NInputColor}} type="number" onChange={(e) => onNChange(e)} ></input>
                   </label>
                   <br />
                   <br />
                   <div style={{ display: 'inline-flex', marginTop: '20px' }}>
-                    <Pulse><Button type = "submit" btnStyle="emphasis" btnSize="large" onClick={this.calculateHandler}>Вычислить</Button></Pulse>
-                    <Pulse><Button style={{ marginLeft: 10 }} btnStyle="emphasis" btnSize="large" onClick={this.props.onDelAll}>Очистить все</Button></Pulse>
-                  </div>  
-                  {fullList}                                 
+                    <Pulse><Button type = "submit" btnStyle="emphasis" btnSize="large" onClick={() => calculateHandler()}>Вычислить</Button></Pulse>
+                    <Pulse><Button style={{ marginLeft: 10 }} btnStyle="emphasis" btnSize="large" onClick={() => deleteAllHandler()}>Очистить все</Button></Pulse>
+                  </div>
+                  {list}
                 </div>
               </form>
               <Sidebar/>
@@ -217,24 +179,20 @@ class CalculationPage extends Component
             </div>
           </div>     
         );
-    }
-    
 }
 
-function mapStateToProps(state1)
-{
-  return({
-      AnswerList: state1.answerList,
-  });
-}
+// function mapStateToProps(state1)
+// {
+//   return({
+//       AnswerList: state1.answerList,
+//   });
+// }
 
-function mapDispatchToProps(dispatch)
-{
-  return{
-    onCalc: (curList) => dispatch(Calculate(curList)),
-    onDelAll: () => dispatch(DeleteAll()),
-    onDel: (index) => dispatch(Delete(index))
-  }
-}
-
-export default connect(mapStateToProps, mapDispatchToProps) (CalculationPage);
+// function mapDispatchToProps(dispatch)
+// {
+//   return{
+//     onCalc: (curList) => dispatch(Calculate(curList)),
+//     onDelAll: () => dispatch(DeleteAll()),
+//     onDel: (index) => dispatch(Delete(index))
+//   }
+// }

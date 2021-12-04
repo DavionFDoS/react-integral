@@ -43,7 +43,7 @@ ReactDOM.render((
   <Provider store = {store}>
     <Router history = {history}>        
       <App/>
-      <functionPlot/>
+      {/* <functionPlot/> */}
     </Router>
   </Provider>),
     document.getElementById('root')
