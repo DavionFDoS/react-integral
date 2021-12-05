@@ -21,7 +21,6 @@ let ratio = contentsBounds.width / width;
 width *= ratio;
 height *= ratio;
 
-
 functionPlot({
   target: "#root",
   width,
@@ -43,7 +42,7 @@ ReactDOM.render((
   <Provider store = {store}>
     <Router history = {history}>        
       <App/>
-      {/* <functionPlot/> */}
+      <functionPlot/>
     </Router>
   </Provider>),
     document.getElementById('root')

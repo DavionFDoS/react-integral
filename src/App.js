@@ -5,6 +5,7 @@ import CalculationPage from './CalculationPage';
 import {Route, Switch, Redirect, withRouter, BrowserRouter} from "react-router-dom";
 import Graphic from "./Graphic";
 import RectangleMethodDescription from "./RectangleMethodDescription";
+import Quiz from "./Quiz/Quiz"
 class App extends React.Component
 { 
   render()
@@ -18,6 +19,7 @@ class App extends React.Component
         <Route history = {history} path = '/CalculationPage' component = {CalculationPage} />
         <Route history = {history} path = '/Graphic' component = {Graphic} />
         <Route history = {history} path = '/RectangleMethodDescription' component = {RectangleMethodDescription} />
+        <Route history = {history} path = '/Quiz' component = {Quiz} />
         <Redirect from = '/' to = '/CalculationPage' />      
       </Switch>
       </BrowserRouter>      

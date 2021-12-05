@@ -17,7 +17,12 @@ export const SidebarData = [
     {
         icon: <DescriptionIcon fontSize = 'large'/>,
         link: "/RectangleMethodDescription"
+    },
+    {
+        icon: <DescriptionIcon fontSize = 'large'/>,
+        link: "/Quiz"
     }
+
 ]
 
 
