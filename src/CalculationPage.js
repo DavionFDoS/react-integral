@@ -86,7 +86,6 @@ export default function CalculationPage()
 
       const calculateHandler = () =>{
         let currentList = answerList;
-        console.log("Enter");
         console.log(currentList);
         let integralVars = {
           a: inputs.a,
@@ -104,10 +103,8 @@ export default function CalculationPage()
         })
           .then(res => {
             currentList.unshift({answer:res.data.answer,a: integralVars.a, b: integralVars.b, N: integralVars.n});
-            console.log("After");
             console.log(currentList);
             setAnswerList(currentList.slice());
-            console.log("AnswerList");
             console.log(answerList);            
           })
           .catch(error => console.log(error));    
