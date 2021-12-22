@@ -1,11 +1,10 @@
 import React from 'react';
-import classes from './CurrentQuestion.css'
 import AnswersList from './AnswersList/AnswersList.js'
 
 
 const CurrentQuestion = props =>(
-    <div className = {classes.CurrentQuestion}>
-        <p className = {classes.Question}>
+    <div className = {'CurrentQuestion'}>
+        <p className = {'Question'}>
             <span>
                 <strong>
                     {props.questionNumber}

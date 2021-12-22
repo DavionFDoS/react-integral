@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-import classes from './Quiz.css'
 import Sidebar from '../Sidebar';
 import CurrentQuestion from './CurrentQuestion/CurrentQuestion'
 import axios from "axios";
@@ -9,11 +8,14 @@ export default class Quiz extends Component{
     state = {
         activeQuestion: 0,
         rightAnswersCount: 0,
-        questions:[]     
+        questions:[{
+              answers: [
+              ]
+            }],
+        correctAnswers: ['Ч', 'В', '1', 'Метода Р', 'Ч']
     }
 
     componentDidMount(){  
-        const questionsList = []
         const headers = {
             'Content-Type': 'application/json'
         }
@@ -22,23 +24,17 @@ export default class Quiz extends Component{
       })
         .then(res => {
             console.log(res);
-            Object.keys(res.data).forEach((key , element) => {
-                questionsList.push({id: key, questionText: element.questionText, questionNumber: element.questionNumber, answers: element.answers, correctAnswer: element.correctAnswer})
-            });
-            console.log(questionsList);
-
             this.setState({
-                questions:  questionsList.slice()
+                questions:  res.data.slice()
             });
+            console.log(this.state.questions);
         })
         .catch(error => console.log(error));
     } 
 
     onAnswerClickHandler = (answerId) =>{
         console.log(answerId);
-        const question = this.state.quiz[this.state.activeQuestion]
-
-        if(question.rightAnswerId === answerId){
+        if(answerId.startsWith(this.state.correctAnswers[this.state.activeQuestion])){
             const timeout = window.setTimeout(() => {
                 if(this.isQuizFinished()){
                     this.setState({
@@ -54,7 +50,7 @@ export default class Quiz extends Component{
                     })
                 }
                 window.clearTimeout(timeout);
-            }, 300)
+            }, 200)
         }else{
             if(this.isQuizFinished()){
                 alert('Ваша оценка ' + String(this.state.rightAnswersCount));        
@@ -67,7 +63,7 @@ export default class Quiz extends Component{
     }
 
     isQuizFinished(){
-        return this.state.activeQuestion + 1 === this.state.quiz.length
+        return this.state.activeQuestion + 1 === this.state.questions.length
     }
 
     submitHandler = (event) =>{
@@ -75,22 +71,24 @@ export default class Quiz extends Component{
     }
 
     render(){
-        return(            
-            <div className = {classes.Quizy}>
+        return(     
+        <div className="Background">
+            <Sidebar/>
+            <div className = {'Quizy'}>               
                 <div>
-                    <div className = {classes.Wrapper}>
-                        <Sidebar/>
+                    <div className = {'Wrapper'}>                       
                         <h1>Ответьте на вопросы, чтобы получить оценку</h1>
-                        <CurrentQuestion 
-                        answers = {this.state.questions[this.state.activeQuestion].answers}
-                        question = {this.state.questions[this.state.activeQuestion].questionText}
-                        onAnserClick = {this.onAnswerClickHandler}
-                        quizLength = {this.state.questions.length}
-                        questionNumber = {this.state.activeQuestion + 1}
-                        />
+                        <CurrentQuestion key = {Math.random(10)}
+                            answers = {this.state.questions[this.state.activeQuestion].answers}
+                            question = {this.state.questions[this.state.activeQuestion].questionText}
+                            onAnserClick = {this.onAnswerClickHandler}
+                            quizLength = {this.state.questions.length}
+                            questionNumber = {this.state.activeQuestion + 1}
+                        />                  
                     </div>
                 </div>                           
-        </div>    
+            </div>    
+        </div> 
         );
     }
 }

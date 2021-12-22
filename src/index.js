@@ -29,11 +29,7 @@ functionPlot({
   grid: true,
   data: [
   {
-  fn: "(log(x) * x) ^ 2",
-  derivative: {
-  fn: "2 * x",
-  updateOnMouseMove: true
-  }
+  fn: "(log(x) * x) ^ 2"
   }
   ]
 });
