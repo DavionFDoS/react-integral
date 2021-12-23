@@ -11,8 +11,7 @@ export default class Quiz extends Component{
         questions:[{
               answers: [
               ]
-            }],
-        correctAnswers: ['Ч', 'В', '1', 'Метода Р', 'Ч']
+            }]
     }
 
     componentDidMount(){  
@@ -32,15 +31,15 @@ export default class Quiz extends Component{
         .catch(error => console.log(error));
     } 
 
-    onAnswerClickHandler = (answerId) =>{
-        console.log(answerId);
-        if(answerId.startsWith(this.state.correctAnswers[this.state.activeQuestion])){
+    onAnswerClickHandler = (answerText) =>{
+        if(answerText === this.state.questions[this.state.activeQuestion].answers[this.state.questions[this.state.activeQuestion].correctAnswer - 1]){
             const timeout = window.setTimeout(() => {
                 if(this.isQuizFinished()){
                     this.setState({
                         rightAnswersCount:  this.state.rightAnswersCount + 1
                     });
                     alert('Ваша оценка ' + String(this.state.rightAnswersCount));
+                    this.RestartQuiz();
                 }else{
                     this.setState({
                         rightAnswersCount: this.state.rightAnswersCount + 1
@@ -53,13 +52,27 @@ export default class Quiz extends Component{
             }, 200)
         }else{
             if(this.isQuizFinished()){
-                alert('Ваша оценка ' + String(this.state.rightAnswersCount));        
+                alert('Ваша оценка ' + String(this.state.rightAnswersCount));
+                this.RestartQuiz();     
             }else{
                 this.setState({
                     activeQuestion: this.state.activeQuestion+1
                 })
             }
         }
+    }
+
+    RestartQuiz(){
+        this.setState({
+          activeQuestion: 0,
+          rightAnswersCount: 0,
+              quiz:[{
+                  questionText: 'Тестирование окончено!',
+                    answers: [
+                    ],
+                    correctanswer:0
+                  }]
+        })
     }
 
     isQuizFinished(){
