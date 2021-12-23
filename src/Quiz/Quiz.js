@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import Sidebar from '../Sidebar';
 import CurrentQuestion from './CurrentQuestion/CurrentQuestion'
 import axios from "axios";
-
+import classes from './Quiz.css'
 export default class Quiz extends Component{
 
     state = {
@@ -72,7 +72,7 @@ export default class Quiz extends Component{
 
     render(){
         return(     
-        <div className="Background">
+        <div>
             <Sidebar/>
             <div className = {'Quizy'}>               
                 <div>

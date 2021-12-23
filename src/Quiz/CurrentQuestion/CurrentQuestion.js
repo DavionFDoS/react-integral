@@ -1,5 +1,6 @@
 import React from 'react';
 import AnswersList from './AnswersList/AnswersList.js'
+import classes from './CurrentQuestion.css'
 
 
 const CurrentQuestion = props =>(

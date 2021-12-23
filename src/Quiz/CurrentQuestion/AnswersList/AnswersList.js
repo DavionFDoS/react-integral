@@ -1,5 +1,6 @@
 import React from "react";
 import AnswerItem from "./AnswerItem/AnswerItem";
+import classes from './AnswersList.css'
 
 const AnswersList = props =>(
     <ul className = {'AnswersList'}>
