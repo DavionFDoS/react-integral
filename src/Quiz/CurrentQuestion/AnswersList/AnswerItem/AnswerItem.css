@@ -7,6 +7,6 @@
 }
 
 .AnswerItem:hover{
-    background: rgba(255,255,255,.2);
+    background: aqua;
     transition: background .3s ease-in-out;
 }
